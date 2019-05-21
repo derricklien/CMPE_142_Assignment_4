@@ -54,16 +54,32 @@ void * cheff(void * arg){
         
         //Fry and Soda
         if ( randNum == 0 ) {
-   
+            
+            CheffCooking = 0;
+            have_Soda = 1;
+            have_Fry = 1;
+           // printf("chef made Fry and Soda"); debug
+            pthread_cond_signal(&Fry);
+            pthread_cond_signal(&Soda);
             
         }
         //Hamburger and Soda
         else if ( randNum == 1 ) {
-
+            CheffCooking = 0;
+            have_Soda = 1;
+            have_Hamburger = 1;
+           // printf("chef made Hamburger and Soda"); debug
+            pthread_cond_signal(&Fry);
+            pthread_cond_signal(&Soda);
         }
         //Hamburger and Fry
         else if ( randNum == 2 ) {
-            
+            CheffCooking = 0;
+            have_Hamburger = 1;
+            have_Fry = 1;
+           // printf("chef made Fry and Hamburger"); debug
+            pthread_cond_signal(&Fry);
+            pthread_cond_signal(&Hamburger);
         }
         
         pthread_mutex_unlock(&m);
