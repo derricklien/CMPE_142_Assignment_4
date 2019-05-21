@@ -1,3 +1,4 @@
+#include <err.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -5,7 +6,6 @@
 #include <unistd.h>
 
 pthread_mutex_t m =    PTHREAD_MUTEX_INITIALIZER;
-pthread_mutex_t EatingCustomer =    PTHREAD_MUTEX_INITIALIZER;
 
 //actor
 pthread_cond_t Cheff =    PTHREAD_COND_INITIALIZER;
@@ -54,31 +54,16 @@ void * cheff(void * arg){
         
         //Fry and Soda
         if ( randNum == 0 ) {
-            CheffCooking = 0;
-            have_Soda = 1;
-            have_Fry = 1;
-          //  printf("made Fry and Soda"); debug
-            pthread_cond_signal(&Fry);
-            pthread_cond_signal(&Soda);
+   
             
         }
         //Hamburger and Soda
         else if ( randNum == 1 ) {
-            CheffCooking = 0;
-            have_Soda = 1;
-            have_Hamburger = 1;
-         //   printf("made Hamburger and Soda"); debug
-            pthread_cond_signal(&Fry);
-            pthread_cond_signal(&Soda);
+
         }
         //Hamburger and Fry
         else if ( randNum == 2 ) {
-            heffCooking = 0;
-            have_Hamburger = 1;
-            have_Fry = 1;
-            //printf("Put Fry and Hamburger"); debug
-            pthread_cond_signal(&Fry);
-            pthread_cond_signal(&Hamburger);
+            
         }
         
         pthread_mutex_unlock(&m);
@@ -99,21 +84,6 @@ void * pusher_Soda(void * arg){
 void * pusher_Hamburger(void * arg){
   
     return 0 ;
-}
-
-void * EatingCustomer_Hamburger(void * arg){
-    
-    return 0;
-}
-
-void * EatingCustomer_Fry(){
-    
-    return 0;
-}
-
-void * EatingCustomer_Soda(){
-    
-    return 0;
 }
 
 int main()
@@ -141,44 +111,22 @@ int main()
          err(1, "pusher_soda_t");
     }
     
-    if (pthread_create(&EatingCustomer_Hamburger_t,NULL,EatingCustomer_Hamburger,NULL) != 0) {
-         err(1, "eating_customer_hamburger_t");
-    }
-    
-    if (pthread_create(&EatingCustomer_Fry_t,NULL,EatingCustomer_Fry,NULL) != 0) {
-        err(1, "eating_customer_fry_t");
-    }
-    
-    if (pthread_create(&EatingCustomer_Soda_t,NULL,EatingCustomer_Soda,NULL) != 0) {
-        err(1, "customer_soda_t");
-    }
     
     // join threads
     if (pthread_join(Cheff_t, NULL)) {
         err(1, "cheff_t");    
     }
-    if (pthread_join(pusher_Hamburger_t, NULL){
+    if (pthread_join(pusher_Hamburger_t, NULL)){
         err(1, "pusher_hamburger_t");
     }
 
-    if (pthread_join(pusher_Fry_t, NULL){
+    if (pthread_join(pusher_Fry_t, NULL)){
         err(1, "pusher_fry_t");
     }
 
-    pthread_join(pusher_Soda_t, NULL){
+    if  (pthread_join(pusher_Soda_t, NULL)){
         err(1, "pusher_soda_t");
     }
 
-    pthread_join(EatingCustomer_Hamburger_t, NULL){
-        err(1, "eating_customer_hamburger_t");
-    }
-
-    pthread_join(EatingCustomer_Fry_t, NULL){
-        err(1, "eating_customer_fry_t");
-    }
-
-    pthread_join(EatingCustomer_Soda_t, NULL){
-        err(1, "eating_customer_soda_t");
-    }
-    
+ 
 }
