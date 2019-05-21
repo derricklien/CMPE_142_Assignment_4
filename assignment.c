@@ -40,7 +40,7 @@ int getRand(int range){
     
 }
 
-void * cheff(void * arg){
+void * chef(void * arg){
     
     for (int i =0; i < 100; i++) {    //test loop
         
