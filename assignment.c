@@ -50,7 +50,7 @@ void * chef(void * arg){
         
         //Chef stays waiting if ChefCooking is equal 0
         while(ChefCooking == 0)
-            pthread_cond_wait(&Cheff, &m);
+            pthread_cond_wait(&Chef, &m);
         int randNum = getRand(3);
         
         //Fry and Soda
@@ -103,7 +103,7 @@ void * FryEats(void * arg){
             have_Hamburger = 0;
             have_Soda = 0;
             FryCustomerEating = 0;
-            CheffCooking = 1;
+            ChefCooking = 1;
         }
         if(have_Hamburger == 1) {
             have_Hamburger = 0;
@@ -165,7 +165,7 @@ void * HamEats(void * arg){
         
         if(have_Soda == 1) {
             have_Soda = 0;
-            CheffCooking = 0;
+            ChefCooking = 0;
             FryCustomerEating = 1;
             CustomerFryAte++;
             //printf("Fry guy eats"); //debug
@@ -202,7 +202,7 @@ int main()
     
     //create threads
     if (pthread_create(&Chef_t,NULL,chef,NULL) != 0) {
-        err(1, "cheff_t");
+        err(1, "chef_t");
     }
     
     if (pthread_create(&HamburgerCustomerFunction,NULL,HamEats,NULL) != 0) {
@@ -219,7 +219,7 @@ int main()
     
     // join threads
     if (pthread_join(Chef_t, NULL))
-        err(1, "cheff_t");
+        err(1, "chef_t");
     printf("Fry guy ate: %i\n", CustomerFryAte);
     printf("Soda guy ate: %i\n", CustomerSodAte);
     printf("Ham guy ate: %i\n", CustomerHamAte);
