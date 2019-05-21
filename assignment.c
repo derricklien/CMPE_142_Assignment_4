@@ -53,35 +53,33 @@ void * chef(void * arg){
             pthread_cond_wait(&Chef, &m);
         int randNum = getRand(3);
         
-        //Fry and Soda
-        if ( randNum == 0 ) {
+        switch (randNum) {
+        case 0:
             ChefCooking = 0;
             have_Soda = 1;
             have_Fry = 1;
             //  printf("made Fry and Soda"); //debug
             pthread_cond_signal(&Fry);
             pthread_cond_signal(&Soda);
-            
-        }
-        //Hamburger and Soda
-        else if ( randNum == 1 ) {
+            break;
+        case 1:
             ChefCooking = 0;
             have_Soda = 1;
             have_Hamburger = 1;
-            //   printf("made Hamburger and Soda"); //debug
-            pthread_cond_signal(&Fry);
+            pthread_cond_signal(&Hamburger);
             pthread_cond_signal(&Soda);
-        }
-        //Hamburger and Fry
-        else if ( randNum == 2 ) {
+            break;
+        case 2:
             ChefCooking = 0;
-            have_Hamburger = 1;
             have_Fry = 1;
-            //printf("Put Fry and Hamburger"); //debug
+            have_Hamburger = 1;
+            //  printf("made Fry and Soda"); //debug
             pthread_cond_signal(&Fry);
             pthread_cond_signal(&Hamburger);
-        }
-        
+            break;
+        default:
+            break;
+    }
         pthread_mutex_unlock(&m);
     }
     return 0;
