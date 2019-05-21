@@ -8,7 +8,7 @@
 pthread_mutex_t m =    PTHREAD_MUTEX_INITIALIZER;
 
 //actor
-pthread_cond_t Cheff =    PTHREAD_COND_INITIALIZER;
+pthread_cond_t Chef =    PTHREAD_COND_INITIALIZER;
 pthread_cond_t CustomerHamburger =    PTHREAD_COND_INITIALIZER;
 pthread_cond_t CustomerFry =    PTHREAD_COND_INITIALIZER;
 pthread_cond_t CustomerSoda =    PTHREAD_COND_INITIALIZER;
@@ -22,7 +22,7 @@ int have_Hamburger = 0;
 int have_Fry = 0;
 int have_Soda = 0;
 
-int CheffCooking = 1;
+int ChefCooking = 1;
 int HamburgerCustomerEating = 0;
 int SodaCustomerEating = 0;
 int FryCustomerEating = 0;
@@ -45,17 +45,17 @@ void * cheff(void * arg){
     for (int i =0; i < 100; i++) {    //test loop
         
         sleep(1);
-        printf ("Cheff cooking round: %i\n", i);
+        printf ("Chef cooking round: %i\n", i);
         pthread_mutex_lock(&m);
         
-        //Chef stays waiting if CheffCooking is equal 0
-        while(CheffCooking == 0)
+        //Chef stays waiting if ChefCooking is equal 0
+        while(ChefCooking == 0)
             pthread_cond_wait(&Cheff, &m);
         int randNum = getRand(3);
         
         //Fry and Soda
         if ( randNum == 0 ) {
-            CheffCooking = 0;
+            ChefCooking = 0;
             have_Soda = 1;
             have_Fry = 1;
             //  printf("made Fry and Soda"); //debug
@@ -65,7 +65,7 @@ void * cheff(void * arg){
         }
         //Hamburger and Soda
         else if ( randNum == 1 ) {
-            CheffCooking = 0;
+            ChefCooking = 0;
             have_Soda = 1;
             have_Hamburger = 1;
             //   printf("made Hamburger and Soda"); //debug
@@ -74,7 +74,7 @@ void * cheff(void * arg){
         }
         //Hamburger and Fry
         else if ( randNum == 2 ) {
-            CheffCooking = 0;
+            ChefCooking = 0;
             have_Hamburger = 1;
             have_Fry = 1;
             //printf("Put Fry and Hamburger"); //debug
@@ -96,7 +96,7 @@ void * FryEats(void * arg){
         
         if(have_Soda == 1) {
             have_Soda = 0;
-            CheffCooking = 0;
+            ChefCooking = 0;
             HamburgerCustomerEating = 1;
             CustomerHamAte++;
             //printf("Fry guy eats"); //debug
@@ -107,14 +107,14 @@ void * FryEats(void * arg){
         }
         if(have_Hamburger == 1) {
             have_Hamburger = 0;
-            CheffCooking = 0;
+            ChefCooking = 0;
             SodaCustomerEating = 1;
             CustomerSodAte++;
             //printf("Soda guy eats"); //debug
             have_Hamburger = 0;
             have_Soda = 0;
             FryCustomerEating = 0;
-            CheffCooking = 1;
+            ChefCooking = 1;
         }
         pthread_mutex_unlock(&m);
     }
@@ -131,25 +131,25 @@ void * SodaEats(void * arg){
         
         if(have_Fry == 1) {
             have_Fry = 0;
-            CheffCooking = 0;
+            ChefCooking = 0;
             HamburgerCustomerEating = 1;
             CustomerHamAte++;
             //printf("Ham guy eats"); //debug
             have_Hamburger = 0;
             have_Soda = 0;
             FryCustomerEating = 0;
-            CheffCooking = 1;
+            ChefCooking = 1;
         }
         if(have_Hamburger == 1) {
             have_Hamburger = 0;
-            CheffCooking = 0;
+            ChefCooking = 0;
             FryCustomerEating = 1;
             CustomerFryAte++;
             //printf("Fry guy eats"); //debug
             have_Hamburger = 0;
             have_Soda = 0;
             FryCustomerEating = 0;
-            CheffCooking = 1;
+            ChefCooking = 1;
         }
         pthread_mutex_unlock(&m);
     }
@@ -172,18 +172,18 @@ void * HamEats(void * arg){
             have_Hamburger = 0;
             have_Soda = 0;
             FryCustomerEating = 0;
-            CheffCooking = 1;
+            ChefCooking = 1;
         }
         if(have_Fry == 1) {
             have_Hamburger = 0;
-            CheffCooking = 0;
+            ChefCooking = 0;
             SodaCustomerEating = 1;
             CustomerSodAte++;
             //printf("Soda guy eats"); //debug
             have_Hamburger = 0;
             have_Soda = 0;
             FryCustomerEating = 0;
-            CheffCooking = 1;
+            ChefCooking = 1;
         }
         pthread_mutex_unlock(&m);
     }
@@ -194,14 +194,14 @@ void * HamEats(void * arg){
 
 int main()
 {
-    pthread_t Cheff_t, HamburgerCustomerFunction, FryCustomerFunction, SodaCustomerFunction;
+    pthread_t Chef_t, HamburgerCustomerFunction, FryCustomerFunction, SodaCustomerFunction;
     
     //random seed
     time_t t;
     srand((unsigned) time(&t));
     
     //create threads
-    if (pthread_create(&Cheff_t,NULL,cheff,NULL) != 0) {
+    if (pthread_create(&Chef_t,NULL,chef,NULL) != 0) {
         err(1, "cheff_t");
     }
     
@@ -218,7 +218,7 @@ int main()
     }
     
     // join threads
-    if (pthread_join(Cheff_t, NULL))
+    if (pthread_join(Chef_t, NULL))
         err(1, "cheff_t");
     printf("Fry guy ate: %i\n", CustomerFryAte);
     printf("Soda guy ate: %i\n", CustomerSodAte);
