@@ -18,16 +18,10 @@ pthread_cond_t Hamburger =    PTHREAD_COND_INITIALIZER;
 pthread_cond_t Fry =    PTHREAD_COND_INITIALIZER;
 pthread_cond_t Soda =    PTHREAD_COND_INITIALIZER;
 
-int have_Hamburger = 0;
-int have_Fry = 0;
+int have_Hamburger = 0, have_Fry = 0;
 int have_Soda = 0;
 
-int ChefCooking = 1;
-int HamburgerCustomerEating = 0;
-int SodaCustomerEating = 0;
-int FryCustomerEating = 0;
-
-int CustomerHamAte =0;
+int ChefCooking = 1, HamburgerCustomerEating = 0, SodaCustomerEating = 0, FryCustomerEating = 0, CustomerHamAte =0;
 int CustomerFryAte =0;
 int CustomerSodAte =0;
 
